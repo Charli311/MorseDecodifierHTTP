@@ -4,7 +4,7 @@
 #include "network_credentials.h"
 
 //Wifi - Connection variables
-const char* serverUrl = "http://<Flask_Server_IP>:5000/handle_morse";
+const String serverUrl = API + "/handle_morse";
 const int max_attempts = 10;
 //Pins
 const int pinLED = 32;
@@ -26,6 +26,10 @@ unsigned long lastErasePress = 0;
 const unsigned long debounceDelay = 500;
 //HTTP client
 HTTPClient http;
+//Functions
+void HandleMorseInput();
+void SendLetterToServer(char letter);
+void SendActionToServer(const String& action);
 
 //Morse alphabet dictionary
 struct MorseCode{

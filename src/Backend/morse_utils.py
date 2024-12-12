@@ -2,7 +2,8 @@ import time
 import torch
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 from firebase_admin import firestore
-from config import db, MORSE_CODE
+from config import MORSE_CODE
+from firebase_methods import save_to_firestore
 
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
 model = GPT2LMHeadModel.from_pretrained('gpt2')
@@ -13,13 +14,7 @@ time_differences = []
 last_letter_time = None
 next_word = ""
 
-def save_to_firestore(data):
-    try:
-        collection_name = "morse_data"
-        document_name = f"entry_{int(time.time())}"
-        db.collection(collection_name).document(document_name).set(data)
-    except Exception as e:
-        print(f"Error saving to firestore: {e}")
+
 
 def predict_next_word(context):
     context = context[-50:]
@@ -80,3 +75,15 @@ def handle_command(action):
         return {"message": "Last letter erased"}
     else:
         return {"error": "unknown command"}
+
+def get_NextWord():
+    global next_word
+    return next_word if next_word else "Making prediction"
+
+def get_sentence():
+    global sentence_buffer
+    return sentence_buffer if sentence_buffer else "Write something"
+
+def get_word():
+    global letter_buffer
+    return letter_buffer if letter_buffer else "Write something"

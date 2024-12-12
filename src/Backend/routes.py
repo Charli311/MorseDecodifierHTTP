@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify
 from morse_utils import process_letter, handle_command
+from morse_utils import get_NextWord,get_sentence,get_word
+from firebase_methods import recover_firestore
 
 morse_bp = Blueprint('morse', __name__)
 
@@ -24,8 +26,13 @@ def handle_action():
 @morse_bp.route('/api/recover_morse',methods=['GET'])
 def recover_morse():
     data = {
-        'buffer': '... --- ...',
-        'sentence': 'SOS',
-        'next_word': 'HELP',
+        'word': get_word(),
+        'sentence': get_sentence(),
+        'next_word': get_NextWord(),
     }
+    return jsonify(data)
+
+@morse_bp.route('/api/recover_firebase', methods=['GET'])
+def recover_firebase():
+    data = recover_firestore()
     return jsonify(data)
