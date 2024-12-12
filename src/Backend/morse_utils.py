@@ -14,8 +14,6 @@ time_differences = []
 last_letter_time = None
 next_word = ""
 
-
-
 def predict_next_word(context):
     context = context[-50:]
     tokenizer.pad_token = tokenizer.eos_token
@@ -60,6 +58,7 @@ def process_letter(letter):
         sentence_buffer += letter_buffer.strip() + ' '
         letter_buffer = ""
         time_differences = []
+        word_length = 0
         next_word = predict_next_word(sentence_buffer)
         return {"next_word": next_word, "sentence": sentence_buffer}
     return {"letter_buffer": letter_buffer}
